@@ -12,8 +12,7 @@ materials = {
     'aluminum':  dict(d=0.01270, L=0.302, k=167),
 }
 
-# --- 2) Thermocouple positions and steady-state readings ---
-#    Note: x must match the number of Texp entries for each case
+# Thermocouple positions and steady-state temperatures
 experiments = {
     'brass_free':     dict(x=np.array([0, 0.0762, 0.1524, 0.2286, 0.3048]),
                            Texp=np.array([79.57, 52.94, 39.14, 32.88, 30.87])),
@@ -33,13 +32,14 @@ experiments = {
                            Texp=np.array([39.25, 27.85, 24.36, 23.32, 23.38])),
 }
 
+# Calculates the heat transfer coefficient (h) and heat transfer along the fin (q)
 def fit_h_and_q(material, x, Texp):
     """Return best-fit h for one fin (given its material props and data)"""
     props = materials[material]
     d, L, k = props['d'], props['L'], props['k']
     P = np.pi * d
     A = np.pi * d**2 / 4
-    T_b = Texp[0]  # assume first thermocouple sits at the base
+    T_b = Texp[0]
 
     def model_T(h):
         m   = np.sqrt(h * P / (k * A))
